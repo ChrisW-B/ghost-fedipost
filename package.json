@@ -1,0 +1,61 @@
+{
+  "name": "lastfm-tweeter",
+  "version": "1.0.0",
+  "description": "Automatically tweets top artists from Last.fm",
+  "keywords": [
+    "lastfm",
+    "twitter"
+  ],
+  "homepage": "https://github.com/ChrisW-B/LastFM-Tweeter#readme",
+  "bugs": {
+    "url": "https://github.com/ChrisW-B/LastFM-Tweeter/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisW-B/LastFM-Tweeter.git"
+  },
+  "license": "ISC",
+  "author": "Chris Barry <me@chrisb.xyz>",
+  "main": "lastfmtweeter.js",
+  "scripts": {
+    "build": "tsc",
+    "deploy": "serverless deploy",
+    "lint:js": "eslint . --ext .ts --cache --cache-location 'node_modules/.cache/.eslintcache/'",
+    "lint:js:fix": "npm run lint:js -- --fix ",
+    "prettier": "prettier --list-different \"./**/*.{ts,tsx,js,jsx,gql,html,yml,json}\" --write",
+    "prettier:check": "prettier './**/*.{ts,tsx,js,jsx,json}' -c",
+    "start": "node dist/handler.js",
+    "typescript": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "16.0.3",
+    "mastodon": "1.2.2"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.111",
+    "@types/node": "18.14.1",
+    "@typescript-eslint/eslint-plugin": "5.53.0",
+    "@typescript-eslint/parser": "5.53.0",
+    "eslint": "8.35.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "8.6.0",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-prettier": "4.2.1",
+    "import-sort-style-module": "6.0.0",
+    "prettier": "2.8.4",
+    "prettier-plugin-import-sort": "0.0.7",
+    "prettier-plugin-packagejson": "2.4.3",
+    "serverless-plugin-typescript": "2.1.4",
+    "typescript": "4.9.5"
+  },
+  "importSort": {
+    ".js, .jsx, .es6, .es": {
+      "parser": "babylon",
+      "style": "module"
+    },
+    ".ts, .tsx": {
+      "parser": "typescript",
+      "style": "module"
+    }
+  }
+}
