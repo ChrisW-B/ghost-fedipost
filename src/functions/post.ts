@@ -1,6 +1,6 @@
 import { APIGatewayEvent } from 'aws-lambda';
 import * as dotenv from 'dotenv';
-import Mastodon from 'mastodon';
+import { login, mastodon } from 'masto';
 
 import { GhostPublishInfo } from '../datamodel';
 
@@ -13,33 +13,39 @@ type RequiredProps = {
   };
 };
 class Poster {
-  private mastodonClient: Mastodon;
+  mastodonClient: mastodon.Client | null = null;
+  static async Login(props: RequiredProps): Promise<Poster> {
+    const instance = new Poster();
 
-  constructor(props: RequiredProps) {
-    this.mastodonClient = new Mastodon(props.mastodon);
+    instance.mastodonClient = await login({
+      url: props.mastodon.api_url,
+      accessToken: props.mastodon.access_token,
+      disableVersionCheck: true,
+    });
+    return instance;
   }
 
-  private postStatus = (status: string, media_ids: string[]) => {
+  private postStatus = (status: string, mediaIds: string[]) => {
     if (process.env['DEBUG']) {
       console.info('Created Post!');
       console.info(status);
       return;
     }
-    return this.mastodonClient.post('/v1/statuses', { status, media_ids, visibility: 'unlisted' });
+    return this.mastodonClient?.v1.statuses.create({ status, mediaIds, visibility: 'unlisted' });
   };
 
   private uploadMedia = async (mediaUrl: string, description: string): Promise<string> => {
     if (process.env['DEBUG'])
       console.info(`Posting to ${process.env['MASTODON_API_URL'] ?? ''}/v2/media`);
-    const uploadedMedia = await this.mastodonClient.post('/v2/media', {
+    const uploadedMedia = await this.mastodonClient?.v2.mediaAttachments.create({
       file: mediaUrl,
       description,
     });
     if (process.env['DEBUG']) {
       console.info('Uploaded media!');
-      console.info(uploadedMedia.data);
+      console.info(uploadedMedia?.id);
     }
-    return uploadedMedia.data['id'] ?? '';
+    return uploadedMedia?.id ?? '';
   };
 
   public run = async (event: APIGatewayEvent): Promise<void> => {
