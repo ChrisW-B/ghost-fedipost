@@ -1,6 +1,7 @@
 import { APIGatewayEvent } from 'aws-lambda';
 import * as dotenv from 'dotenv';
 import { login, mastodon } from 'masto';
+import fetch from 'node-fetch';
 
 import { GhostPublishInfo } from '../datamodel';
 
@@ -35,10 +36,14 @@ class Poster {
   };
 
   private uploadMedia = async (mediaUrl: string, description: string): Promise<string> => {
-    if (process.env['DEBUG'])
-      console.info(`Posting to ${process.env['MASTODON_API_URL'] ?? ''}/v2/media`);
+    const res = await fetch(mediaUrl, {
+      headers: {},
+      method: 'GET',
+    });
+    const imageBlob = await res.blob();
+
     const uploadedMedia = await this.mastodonClient?.v2.mediaAttachments.create({
-      file: mediaUrl,
+      file: imageBlob,
       description,
     });
     if (process.env['DEBUG']) {
@@ -57,7 +62,7 @@ class Poster {
       if (currentPost) {
         const media = await this.uploadMedia(
           currentPost.feature_image,
-          currentPost.feature_image_caption,
+          currentPost.feature_image_alt ?? '',
         );
         const postText = `
 New post on my photoblog!
