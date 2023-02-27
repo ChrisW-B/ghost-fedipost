@@ -30,25 +30,32 @@ class Poster {
 
   private uploadMedia = async (mediaUrl: string, description: string): Promise<string> => {
     const uploadedMedia = await this.mastodonClient.post('media', { file: mediaUrl, description });
+    if (process.env['DEBUG']) {
+      console.info('Uploaded media!');
+      console.info(uploadedMedia.data);
+    }
     return uploadedMedia.data['id'] ?? '';
   };
 
   public run = async (event: APIGatewayEvent): Promise<void> => {
     try {
       const body = JSON.parse(event.body ?? '') as GhostPublishInfo;
-      const currentPost = body.post.current;
-      const media = await this.uploadMedia(
-        currentPost.feature_image,
-        currentPost.feature_image_caption,
-      );
-      const postText = `
+      console.log({ body });
+      const currentPost = body?.post?.current;
+      if (currentPost) {
+        const media = await this.uploadMedia(
+          currentPost.feature_image,
+          currentPost.feature_image_caption,
+        );
+        const postText = `
 New post on my photoblog!
 
 "${currentPost.title}"
 
 ${currentPost.url}
       `;
-      await this.postStatus(postText, [media]);
+        await this.postStatus(postText, [media]);
+      }
     } catch (e) {
       console.error(e);
     }
