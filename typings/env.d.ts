@@ -6,7 +6,7 @@ declare module 'mastodon' {
   export default class Mastodon {
     constructor(props: MastodonConstructorOptions);
     post(
-      path: 'statuses',
+      path: '/v1/statuses',
       params: {
         status: string;
         media_ids?: string[];

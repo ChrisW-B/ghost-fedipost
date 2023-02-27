@@ -25,11 +25,11 @@ class Poster {
       console.info(status);
       return;
     }
-    return this.mastodonClient.post('statuses', { status, media_ids, visibility: 'unlisted' });
+    return this.mastodonClient.post('/v1/statuses', { status, media_ids, visibility: 'unlisted' });
   };
 
   private uploadMedia = async (mediaUrl: string, description: string): Promise<string> => {
-    const uploadedMedia = await this.mastodonClient.post('media', { file: mediaUrl, description });
+    const uploadedMedia = await this.mastodonClient.post('/v2/media', { file: mediaUrl, description });
     if (process.env['DEBUG']) {
       console.info('Uploaded media!');
       console.info(uploadedMedia.data);
