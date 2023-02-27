@@ -36,14 +36,11 @@ class Poster {
   };
 
   private uploadMedia = async (mediaUrl: string, description: string): Promise<string> => {
-    const res = await fetch(mediaUrl, {
-      headers: {},
-      method: 'GET',
-    });
-    const imageBlob = await res.blob();
+    const res = await fetch(mediaUrl, { method: 'GET' });
+    const imageBuffer = await res.buffer();
 
     const uploadedMedia = await this.mastodonClient?.v2.mediaAttachments.create({
-      file: imageBlob,
+      file: imageBuffer,
       description,
     });
     if (process.env['DEBUG']) {
@@ -56,7 +53,6 @@ class Poster {
   public run = async (event: APIGatewayEvent): Promise<void> => {
     try {
       const body = JSON.parse(event.body ?? '') as GhostPublishInfo;
-      console.log({ body: event.body });
       const currentPost = body?.post?.current;
       console.log({ currentPost });
       if (currentPost) {
