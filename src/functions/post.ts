@@ -32,7 +32,7 @@ class Poster {
       console.info(status);
       return;
     }
-    return this.mastodonClient?.v1.statuses.create({ status, mediaIds, visibility: 'unlisted' });
+    return this.mastodonClient?.v1.statuses.create({ status, mediaIds, visibility: 'public' });
   };
 
   private uploadMedia = async (mediaUrl: string, description: string): Promise<string> => {
