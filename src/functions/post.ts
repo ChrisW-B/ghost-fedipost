@@ -54,7 +54,6 @@ class Poster {
     try {
       const body = JSON.parse(event.body ?? '') as GhostPublishInfo;
       const currentPost = body?.post?.current;
-      console.log({ currentPost });
       if (currentPost) {
         const media = await this.uploadMedia(
           currentPost.feature_image,

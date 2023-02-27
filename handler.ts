@@ -5,7 +5,7 @@ import MastodonPoster from './src/functions/post';
 
 dotenv.config();
 
-export async function photoToGotosocial(event: APIGatewayEvent): Promise<void> {
+export async function photoToGotosocial(event: APIGatewayEvent) {
   const Post = await MastodonPoster.Login({
     mastodon: {
       access_token: process.env['MASTODON_ACCESS_TOKEN'] ?? '',
@@ -13,5 +13,13 @@ export async function photoToGotosocial(event: APIGatewayEvent): Promise<void> {
     },
   });
 
-  return await Post.run(event);
+  try {
+    await Post.run(event);
+    return { status: 200 };
+  } catch (error) {
+    let message;
+    if (error instanceof Error) message = error.message;
+    else message = String(error);
+    return { status: 500, body: message };
+  }
 }
