@@ -1,4 +1,3 @@
-import { APIGatewayEvent } from 'aws-lambda';
 import * as dotenv from 'dotenv';
 import { login, mastodon } from 'masto';
 import fetch from 'node-fetch';
@@ -50,9 +49,8 @@ class Poster {
     return uploadedMedia?.id ?? '';
   };
 
-  public run = async (event: APIGatewayEvent): Promise<void> => {
+  public run = async (body: GhostPublishInfo): Promise<void> => {
     try {
-      const body = JSON.parse(event.body ?? '') as GhostPublishInfo;
       const currentPost = body?.post?.current;
       if (currentPost) {
         const media = await this.uploadMedia(

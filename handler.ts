@@ -1,6 +1,7 @@
 import { APIGatewayEvent } from 'aws-lambda';
 import * as dotenv from 'dotenv';
 
+import { GhostPublishInfo } from './src/datamodel';
 import MastodonPoster from './src/functions/post';
 
 dotenv.config();
@@ -14,7 +15,8 @@ export async function photoToGotosocial(event: APIGatewayEvent) {
   });
 
   try {
-    await Post.run(event);
+    const body = JSON.parse(event.body ?? '') as GhostPublishInfo;
+    await Post.run(body);
     return { status: 200 };
   } catch (error) {
     let message;
