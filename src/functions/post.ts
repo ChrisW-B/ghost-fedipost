@@ -33,19 +33,26 @@ class Poster {
     return this.mastodonClient?.v1.statuses.create({ status, mediaIds, visibility: 'public' });
   };
 
-  private uploadMedia = async (mediaUrl: string, description: string): Promise<string> => {
+  private uploadMedia = async (mediaUrl: string, description: string): Promise<string | null> => {
     const res = await fetch(mediaUrl, { method: 'GET' });
-    const imageBuffer = await res.arrayBuffer();
 
-    const uploadedMedia = await this.mastodonClient?.v2.mediaAttachments.create({
-      file: imageBuffer,
-      description,
-    });
-    if (process.env['DEBUG']) {
-      console.info('Uploaded media!');
-      console.info(uploadedMedia?.id);
+    if (res.ok) {
+      const imageBuffer = await res.blob();
+      const uploadedMedia = await this.mastodonClient?.v2.mediaAttachments.create({
+        file: imageBuffer,
+        description,
+      });
+      if (process.env['DEBUG']) {
+        console.info('Uploaded media!');
+        console.info(uploadedMedia?.id);
+      }
+      return uploadedMedia?.id ?? '';
     }
-    return uploadedMedia?.id ?? '';
+    if (process.env['DEBUG']) {
+      console.info('Failed to fetch media');
+      console.info(res.statusText);
+    }
+    return null;
   };
 
   public run = async (body: GhostPublishInfo): Promise<void> => {
@@ -53,7 +60,6 @@ class Poster {
       const currentPost = body?.post?.current;
       if (process.env['DEBUG']) {
         console.info('Received publish event');
-        console.info({ body });
         console.info({ currentPost });
       }
       if (currentPost) {
@@ -61,6 +67,9 @@ class Poster {
           currentPost.feature_image,
           currentPost.feature_image_alt ?? '',
         );
+        if (!media) {
+          throw new Error('Failed to upload media');
+        }
         const postText = `
 New post on my photoblog!
 
