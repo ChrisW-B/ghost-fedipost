@@ -6,11 +6,10 @@ import MastodonPoster from './src/functions/post';
 
 dotenv.config();
 
-export async function photoToGotosocial(event: APIGatewayEvent) {
-
+export async function photoToGotosocial(body: string | null) {
   if (process.env['DEBUG']) {
     console.info('Received event!');
-    console.info(event);
+    console.info(body);
   }
 
   const Post = await MastodonPoster.Login({
@@ -21,8 +20,8 @@ export async function photoToGotosocial(event: APIGatewayEvent) {
   });
 
   try {
-    const body = JSON.parse(event.body ?? '') as GhostPublishInfo;
-    await Post.run(body);
+    const parsedBody = JSON.parse(body ?? '') as GhostPublishInfo;
+    await Post.run(parsedBody);
     return { status: 200 };
   } catch (error) {
     let message;
