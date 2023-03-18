@@ -1,4 +1,3 @@
-import { APIGatewayEvent } from 'aws-lambda';
 import * as dotenv from 'dotenv';
 
 import { GhostPublishInfo } from './src/datamodel';
