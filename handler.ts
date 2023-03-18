@@ -7,6 +7,12 @@ import MastodonPoster from './src/functions/post';
 dotenv.config();
 
 export async function photoToGotosocial(event: APIGatewayEvent) {
+
+  if (process.env['DEBUG']) {
+    console.info('Received event!');
+    console.info(event);
+  }
+
   const Post = await MastodonPoster.Login({
     mastodon: {
       access_token: process.env['MASTODON_ACCESS_TOKEN'] ?? '',
