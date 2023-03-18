@@ -51,6 +51,11 @@ class Poster {
   public run = async (body: GhostPublishInfo): Promise<void> => {
     try {
       const currentPost = body?.post?.current;
+      if (process.env['DEBUG']) {
+        console.info('Received publish event');
+        console.info({ body });
+        console.info({ currentPost });
+      }
       if (currentPost) {
         const media = await this.uploadMedia(
           currentPost.feature_image,
