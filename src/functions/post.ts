@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
 import { login, mastodon } from 'masto';
-import fetch from 'node-fetch';
 
 import { GhostPublishInfo } from '../datamodel';
 
@@ -36,7 +35,7 @@ class Poster {
 
   private uploadMedia = async (mediaUrl: string, description: string): Promise<string> => {
     const res = await fetch(mediaUrl, { method: 'GET' });
-    const imageBuffer = await res.buffer();
+    const imageBuffer = await res.arrayBuffer();
 
     const uploadedMedia = await this.mastodonClient?.v2.mediaAttachments.create({
       file: imageBuffer,
