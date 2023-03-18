@@ -22,6 +22,7 @@ export async function photoToGotosocial(event: APIGatewayEvent) {
     let message;
     if (error instanceof Error) message = error.message;
     else message = String(error);
+    console.error(error);
     return { status: 500, body: message };
   }
 }
