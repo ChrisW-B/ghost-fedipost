@@ -29,14 +29,14 @@
   },
   "dependencies": {
     "dotenv": "16.0.3",
-    "masto": "5.11.2"
+    "masto": "5.11.3"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.114",
+    "@types/aws-lambda": "8.10.115",
     "@types/dotenv": "8.2.0",
-    "@types/node": "18.16.3",
-    "@typescript-eslint/eslint-plugin": "5.59.1",
-    "@typescript-eslint/parser": "5.59.1",
+    "@types/node": "18.16.5",
+    "@typescript-eslint/eslint-plugin": "5.59.2",
+    "@typescript-eslint/parser": "5.59.2",
     "eslint": "8.39.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.8.0",
