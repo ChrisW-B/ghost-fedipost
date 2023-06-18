@@ -32,11 +32,11 @@
     "masto": "5.11.3"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.117",
+    "@types/aws-lambda": "8.10.119",
     "@types/dotenv": "8.2.0",
-    "@types/node": "18.16.17",
-    "@typescript-eslint/eslint-plugin": "5.59.9",
-    "@typescript-eslint/parser": "5.59.9",
+    "@types/node": "18.16.18",
+    "@typescript-eslint/eslint-plugin": "5.59.11",
+    "@typescript-eslint/parser": "5.59.11",
     "eslint": "8.42.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.8.0",
