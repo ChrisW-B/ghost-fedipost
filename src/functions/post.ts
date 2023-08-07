@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { login, mastodon } from 'masto';
+import { createRestAPIClient, mastodon } from 'masto';
 
 import { GhostPublishInfo } from '../datamodel';
 
@@ -12,14 +12,13 @@ type RequiredProps = {
   };
 };
 class Poster {
-  mastodonClient: mastodon.Client | null = null;
-  static async Login(props: RequiredProps): Promise<Poster> {
+  mastodonClient: mastodon.rest.Client | null = null;
+  static Login(props: RequiredProps): Poster {
     const instance = new Poster();
 
-    instance.mastodonClient = await login({
+    instance.mastodonClient = createRestAPIClient({
       url: props.mastodon.api_url,
       accessToken: props.mastodon.access_token,
-      disableVersionCheck: true,
     });
     return instance;
   }
@@ -38,7 +37,7 @@ class Poster {
 
     if (res.ok) {
       const imageBuffer = await res.blob();
-      const uploadedMedia = await this.mastodonClient?.v2.mediaAttachments.create({
+      const uploadedMedia = await this.mastodonClient?.v2.media.create({
         file: imageBuffer,
         description,
       });

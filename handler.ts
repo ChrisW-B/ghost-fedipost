@@ -6,7 +6,7 @@ import MastodonPoster from './src/functions/post';
 dotenv.config();
 
 export async function photoToGotosocial(body: string | null) {
-  const Post = await MastodonPoster.Login({
+  const Post = MastodonPoster.Login({
     mastodon: {
       access_token: process.env['MASTODON_ACCESS_TOKEN'] ?? '',
       api_url: process.env['MASTODON_API_URL'] ?? '',
