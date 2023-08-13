@@ -29,12 +29,12 @@
   },
   "dependencies": {
     "dotenv": "16.3.1",
-    "masto": "6.0.5"
+    "masto": "6.0.6"
   },
   "devDependencies": {
     "@types/aws-lambda": "8.10.119",
     "@types/dotenv": "8.2.0",
-    "@types/node": "18.17.3",
+    "@types/node": "18.17.5",
     "@typescript-eslint/eslint-plugin": "6.2.1",
     "@typescript-eslint/parser": "6.2.1",
     "eslint": "8.46.0",
